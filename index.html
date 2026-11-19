@@ -71,6 +71,7 @@ input:focus,textarea:focus{border-color:var(--accent);box-shadow:0 0 0 3px color
 .dz{transition:background .15s,transform .15s}.dz:hover{background:rgba(255,255,255,.24);transform:translateY(-1px)}
 .go{background:linear-gradient(135deg,#fff,#ece7ff);transition:transform .15s,box-shadow .15s}.go:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 12px 24px rgba(0,0,0,.28)}.go:active:not(:disabled){transform:scale(.98)}
 @media print{.hero{display:none}body{background:#fff}.page{border-radius:0;box-shadow:none;overflow:visible}.lb{color:#000}input,textarea{background:#fff!important;border-color:#999;box-shadow:none}}
+@media screen and (max-width:700px){.wrap{overflow-x:visible}.page{min-width:0}.g{grid-template-columns:1fr}.c+.c{border-inline-start:0}.g>.c:first-child,.g>div:first-child{border-bottom:0}.row.w{flex-wrap:wrap}}
 </style>
 </head>
 <body>
@@ -177,13 +178,14 @@ try{
 var blobs=await Promise.all(files.map(shrink));
 var imgs=await Promise.all(blobs.map(toB64));
 var resp=await fetch("/api/prepare",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({images:imgs})});
-if(!resp.ok){var er=new Error("api");er.status=resp.status;throw er}
+if(!resp.ok){var tx="";try{tx=(await resp.text()).slice(0,160)}catch(e0){}var er=new Error("api");er.status=resp.status;er.detail=tx;throw er}
+var ct=resp.headers.get("content-type")||"";if(ct.indexOf("json")<0){var e2=new Error("api");e2.status=resp.status;e2.detail="مسار /api/prepare غير موجود، تأكد من رفع مجلد functions";throw e2}
 var r=await resp.json();
 var t=(r.text||"").replace(/```json|```/g,""),a=t.indexOf("{"),z=t.lastIndexOf("}");
 var d=JSON.parse(t.slice(a,z+1)),n=0;
 els.forEach(function(e){var v=d[e.dataset.k];if(typeof v==="string"&&v.trim()){e.value=v;n++;grow(e)}});
 els.forEach(grow);save();st.textContent="تم تحضير الدرس ✓ راجعه وعدّل ما تريد";document.querySelector(".page").scrollIntoView({behavior:"smooth"});
-}catch(x){st.textContent=(x&&x.status===429)?"تجاوزت الحد المجاني حالياً، حاول بعد دقيقة أو غداً":"تعذّر التحضير، تأكد من إعداد الخادم أو جرّب صورة أوضح"}
+}catch(x){st.textContent=(x&&x.status===429)?"تجاوزت الحد المجاني حالياً، حاول بعد دقيقة أو غداً":"تعذّر التحضير ("+((x&&x.status)||"اتصال")+") "+((x&&x.detail)||"")}
 finally{up.disabled=!picked.length;go.textContent="✨ انقر للتحضير"}
 };
 load();
