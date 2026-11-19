@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>تحضير الدروس</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#5b4bdb">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="hero">
+<div><h1>تحضير الدروس<span>تحضير ذكي من صورة الكتاب</span></h1><p>ارفع حتى 3 صور من الدرس، ثم انقر للتحضير لتمتلئ خانات النموذج تلقائياً.</p></div>
+<div>
+<div id="dz" class="dz" tabindex="0" role="button">📷 أضف صورة (0/3)</div><input type="file" id="fi" accept="image/*" multiple hidden>
+<div id="th" class="th"></div>
+<button class="go" id="go" disabled>✨ انقر للتحضير</button>
+<div class="mini"><button id="pr">🖨 طباعة / PDF</button><button id="nw">✚ درس جديد</button><span id="st"></span></div>
+</div>
+</header>
+<div class="wrap">
+<div class="pn">رقم الصفحة ( <input data-k="pg" style="width:50px;text-align:center"> )</div>
+<div class="page">
+
+<div class="g">
+<div class="c">
+<div class="row"><b>اليوم :</b><input data-k="day"></div>
+<div class="row"><b>التاريخ:</b>
+<span>14</span><b>هـ</b><input class="s" data-k="h1" aria-label="هجري"><span>/</span><input class="s" data-k="h2"><span>/</span><input class="s" data-k="h3">
+</div>
+<div class="row"><b style="visibility:hidden">التاريخ:</b><span>20</span><b>م</b><input class="s" data-k="m1" aria-label="ميلادي"><span>/</span><input class="s" data-k="m2"><span>/</span><input class="s" data-k="m3"></div>
+<div class="row w"><b>الصف:</b><input class="m" data-k="cls"><b>الشعبة:</b><input class="m" data-k="sec"><b>الحصة:</b><input class="m" data-k="per"></div>
+</div>
+<div class="c">
+<div class="row"><b>طرائق التدريس:</b><input data-k="meth1"></div>
+<div class="row"><input data-k="meth2"></div>
+<div class="row"><b>موارد التعلم ووسائطه:</b><input data-k="res"></div>
+</div>
+</div>
+
+<div class="g">
+<div class="c" style="min-height:92px">
+<div class="row"><b>المادة:</b><input data-k="sub"><b>الموضوع:</b><input data-k="topic"></div>
+</div>
+<div class="c sp" style="padding:0">
+<div style="padding:10px 8px"><span class="lb">الزمن:</span><input data-k="t0"></div>
+<div style="padding:10px 8px"><span class="lb">التمهيد والتهيئة:</span><textarea data-k="intro" rows="2"></textarea></div>
+</div>
+</div>
+
+<div class="g">
+<div>
+<div class="c sp" style="padding:0">
+<div style="padding:10px 8px"><span class="lb">الزمن:</span><input data-k="to1"><input data-k="to2"><input data-k="to3"><input data-k="to4"><input data-k="to5"></div>
+<div style="padding:10px 8px"><span class="lb">مخرجات التعلم: يتوقع من التلميذ/الطالب في نهاية الدرس أن:</span><textarea data-k="out" rows="6"></textarea></div>
+</div>
+<div class="c"><span class="lb">التقويم المرحلي:</span><textarea data-k="ev1" rows="5"></textarea>
+</div><div class="c" style="border-bottom:0;border-inline-start:0;border-top:1.5px solid var(--line)"><div class="row"><b>التقويم النهائي:</b><b style="margin-inline-start:24px">الزمن:</b><input class="m" data-k="evt"></div>
+<textarea data-k="ev2" rows="2"></textarea></div>
+</div>
+<div class="c" style="border-inline-start:1.5px solid var(--line)">
+<span class="lb">مسار الدرس (الأنشطة المحققة للأهداف):</span>
+<textarea data-k="flow" rows="13"></textarea>
+<div class="row" style="margin-top:10px"><b>إغلاق الدرس :</b><input data-k="close"><b>الزمن</b><input class="m" data-k="ct"></div>
+<textarea data-k="close2" rows="3"></textarea>
+</div>
+</div>
+
+<div class="g">
+<div class="c"><span class="lb">نشاط للمتميزين:</span><textarea data-k="hi" rows="3"></textarea></div>
+<div class="c"><span class="lb">نشاط للأقل تحصيلاً:</span><textarea data-k="lo" rows="3"></textarea></div>
+</div>
+
+<div class="c nb">
+<span class="lb">ملاحظات المقيِّم:</span><textarea data-k="n1" rows="2"></textarea>
+<span class="lb">نقاط القوة:</span><textarea data-k="n2" rows="2"></textarea>
+<span class="lb">نقاط يجب معالجتها:</span><textarea data-k="n3" rows="2"></textarea>
+</div>
+</div>
+</div>
+<div class="sign">
+<div>اسم وتوقيع المعلم / المدرس<input data-k="sg1"></div>
+<div>اسم وتوقيع المقيِّم مع الصفة<input data-k="sg2"></div>
+</div>
+<script src="app.js"></script>
+</body>
+</html>
