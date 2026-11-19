@@ -21,23 +21,29 @@ export async function onRequestPost({ request, env }) {
   try {
     let j = null, status = 502;
     for (const model of models) {
-      const r = await fetch(
-        `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent`,
-        {
-          method: "POST",
-          headers: { "content-type": "application/json", "x-goog-api-key": env.GEMINI_API_KEY },
-          body: JSON.stringify({
-            contents: [{ role: "user", parts }],
-            generationConfig: { responseMimeType: "application/json", maxOutputTokens: 8192, temperature: 0.4 },
-          }),
-        }
-      );
-      j = await r.json();
-      status = r.status;
-      if (r.ok) break;
-      if (r.status !== 404) return json({ error: j }, r.status === 429 ? 429 : 502);
+      for (let attempt = 0; attempt < 2; attempt++) {
+        const r = await fetch(
+          `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent`,
+          {
+            method: "POST",
+            headers: { "content-type": "application/json", "x-goog-api-key": env.GEMINI_API_KEY },
+            body: JSON.stringify({
+              contents: [{ role: "user", parts }],
+              generationConfig: { responseMimeType: "application/json", maxOutputTokens: 8192, temperature: 0.4 },
+            }),
+          }
+        );
+        j = await r.json();
+        status = r.status;
+        if (r.ok) break;
+        if (r.status === 503 && attempt === 0) { await new Promise((res) => setTimeout(res, 1500)); continue; }
+        break;
+      }
+      if (status === 200) break;
+      // نموذج غير متاح أو مشغول أو تجاوز حصته: جرّب النموذج التالي
+      if (![404, 429, 503].includes(status)) return json({ error: j }, 502);
     }
-    if (!j || status !== 200) return json({ error: j }, 502);
+    if (!j || status !== 200) return json({ error: j }, status === 429 || status === 503 ? status : 502);
     const cand = (j.candidates || [])[0];
     const text = ((cand && cand.content && cand.content.parts) || []).map((p) => p.text || "").join("");
     if (!text) return json({ error: "empty response", detail: j.promptFeedback || null }, 502);
