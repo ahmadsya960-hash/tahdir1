@@ -17,21 +17,27 @@ export async function onRequestPost({ request, env }) {
   const parts = images.map((data) => ({ inline_data: { mime_type: "image/jpeg", data } }));
   parts.push({ text: PROMPT });
 
-  const model = env.MODEL || "gemini-2.5-flash";
+  const models = [env.MODEL, "gemini-3.8-flash", "gemini-3.5-flash", "gemini-3.5-flash-lite"].filter(Boolean);
   try {
-    const r = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent`,
-      {
-        method: "POST",
-        headers: { "content-type": "application/json", "x-goog-api-key": env.GEMINI_API_KEY },
-        body: JSON.stringify({
-          contents: [{ role: "user", parts }],
-          generationConfig: { responseMimeType: "application/json", maxOutputTokens: 8192, temperature: 0.4 },
-        }),
-      }
-    );
-    const j = await r.json();
-    if (!r.ok) return json({ error: j }, r.status === 429 ? 429 : 502);
+    let j = null, status = 502;
+    for (const model of models) {
+      const r = await fetch(
+        `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent`,
+        {
+          method: "POST",
+          headers: { "content-type": "application/json", "x-goog-api-key": env.GEMINI_API_KEY },
+          body: JSON.stringify({
+            contents: [{ role: "user", parts }],
+            generationConfig: { responseMimeType: "application/json", maxOutputTokens: 8192, temperature: 0.4 },
+          }),
+        }
+      );
+      j = await r.json();
+      status = r.status;
+      if (r.ok) break;
+      if (r.status !== 404) return json({ error: j }, r.status === 429 ? 429 : 502);
+    }
+    if (!j || status !== 200) return json({ error: j }, 502);
     const cand = (j.candidates || [])[0];
     const text = ((cand && cand.content && cand.content.parts) || []).map((p) => p.text || "").join("");
     if (!text) return json({ error: "empty response", detail: j.promptFeedback || null }, 502);
