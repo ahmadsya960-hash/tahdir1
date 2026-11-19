@@ -71,7 +71,8 @@ input:focus,textarea:focus{border-color:var(--accent);box-shadow:0 0 0 3px color
 .dz{transition:background .15s,transform .15s}.dz:hover{background:rgba(255,255,255,.24);transform:translateY(-1px)}
 .go{background:linear-gradient(135deg,#fff,#ece7ff);transition:transform .15s,box-shadow .15s}.go:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 12px 24px rgba(0,0,0,.28)}.go:active:not(:disabled){transform:scale(.98)}
 @media print{.hero{display:none}body{background:#fff}.page{border-radius:0;box-shadow:none;overflow:visible}.lb{color:#000}input,textarea{background:#fff!important;border-color:#999;box-shadow:none}}
-@media screen and (max-width:700px){.wrap{overflow-x:visible}.page{min-width:0}.g{grid-template-columns:1fr}.c+.c{border-inline-start:0}.g>.c:first-child,.g>div:first-child{border-bottom:0}.row.w{flex-wrap:wrap}}
+html,body{max-width:100%;overflow-x:hidden}
+@media screen and (max-width:700px){.page{min-width:0}.g{grid-template-columns:minmax(0,1fr)}.g>*{min-width:0}.c+.c{border-inline-start:0}.row{flex-wrap:wrap}.sp{grid-template-columns:76px minmax(0,1fr)}.hero{grid-template-columns:minmax(0,1fr)}}
 </style>
 </head>
 <body>
